@@ -1,11 +1,17 @@
+<?php
+session_start();
+?>
 <html>
-    <!-- Favicon Icon -->
-    <link rel="icon" href="image/movielogo32.ico">
     
-    <head>   
+    <!-- Favicon Icon -->
+    <link rel="icon" href="../image/movielogo32.ico">
+    
+    <head> 
         <meta charset="UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
         <style>
             /* width */
             ::-webkit-scrollbar {
@@ -68,88 +74,113 @@
               color: black;
             }
             
+            .cards{
+                display:flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                margin-top:5%;
+            }
+            
+            .card{
+                width:23%;
+                text-align:center;
+                padding:1.5em;
+                margin-bottom: 2em;
+            }
+            .images{
+                width:80%;
+                height:80%;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 5%;
+            }
+            
+            *{
+                padding:0;
+                margin:0;
+                box-sizing:border-box;
+            }
+            .title{
+                text-align:center;
+                font-size: 1.3rem;
+            }
+            
+            
         </style>
         
         <!--Navigation Bar-->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            <img src="../image/movielogo.png" width="40" height="40";/>
+            <a class="navbar-brand" href="../FrontEnd/HomePage.php">N.E.S Cinema</a>
+            
             <div class="container-fluid">
-                <img src="image/movielogo.png" width="40" height="40";>
-                <a class="navbar-brand" href="HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
+                <p></p>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                      <a class="nav-link" href="MoviesPage.php">Movies</a>
+                      <a class="nav-link" href="../FrontEnd/MoviesPage.php">Movies</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="TicketsOverviewPage.php">Tickets Overview</a>
+                      <?php
+                        if(isset($_SESSION['userLogged'])){
+                            echo '<a class="nav-link" href="../FrontEnd/TicketsOverviewPage.php">Tickets Overview</a>';
+                        }
+                        ?>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Account</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="AccountPage.php">Settings</a></li>
-                            <li><a class="dropdown-item" href="LoginPage.php">Log In</a></li>
+                            <?php
+                            if(isset($_SESSION['userLogged'])){
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/AccountPage.php">Settings</a></li>';
+                                echo '<li><a class="dropdown-item" href="../BackEnd/logout.php">Log Out</a></li>';
+                            }else{
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/LoginPage.php">Log In</a></li>';
+                            }
+                            ?>
                         </ul>
                     </li>
                 </ul>
             </div>
         </nav>
-    
       <title>NES Cinema</title>
       
     
     </head>
     <body>
-        
+        <?php
+            
+            if(isset($_SESSION['noTickets'])){
+
+                ?>
+                <script>
+                Swal.fire({
+                icon: 'info',
+                title: 'Empty',
+                text: 'You did not purchase any movies'
+                });
+                </script>
+            <?php
+                unset($_SESSION['noTickets']);
+            }
+            ?> 
         
         <!--Greeting-->
         <div style="width:100%; height:400px; margin-top: 3%">
-            <img style="width:100%; height:400px;" src="https://www.shreveportlittletheatre.com/images/ticket.gif">
+            <img style="width:100%; height:400px;" src="https://www.doditsolutions.com/wp-content/uploads/movie-theater-revival-popcorn-1.jpg">
         </div>
         
-        <div style="width:100%; height:1200px;">
-            <table style="width:100%; height:1200px;">
-                <tr align="center"">
-                    <td>
-                        <img style="box-shadow: 5px 10px 8px #888888;" width="300px" height="400px" src="https://terrigen-cdn-dev.marvel.com/content/prod/1x/doctorstrangeinthemultiverseofmadness_lob_crd_02_3.jpg">
-                        <p style="font-size:20px; margin-top: 5%;">Doctor Strange: Multiverse of Madness</p>
-                        <button id="doctorStrange" class="btn btn-primary" onclick="document.location='PurchasePage.php'">Buy Now</button>
-                    </td>
-                    <td>
-                        <img style="box-shadow: 5px 10px 8px #888888;" width="300px" height="400px" src="https://upload.wikimedia.org/wikipedia/en/8/88/Thor_Love_and_Thunder_poster.jpeg" >
-                        <p style="font-size:20px; margin-top: 5%;">Thor: Love and Thunder</p>
-                        <button id="thor" class="btn btn-primary">Buy Now</button>
-                    </td>
-                    <td>
-                        <img style="box-shadow: 5px 10px 8px #888888;" width="300px" height="400px" src="https://upload.wikimedia.org/wikipedia/en/2/21/Pirates_of_the_Caribbean%2C_Dead_Men_Tell_No_Tales.jpg">
-                        <p style="font-size:20px; margin-top: 5%;">Pirates of the Caribbean: Dead Man Tell No Tales</p>
-                        <button id="pirates"  class="btn btn-primary">Buy Now</button>
-                    </td>
-                </tr>
-                <tr align="center">
-                    <td>
-                        <img style="box-shadow: 5px 10px 8px #888888;" width="300px" height="400px" src="https://upload.wikimedia.org/wikipedia/en/3/34/Fantastic_Beasts-_The_Secrets_of_Dumbledore.png">
-                        <p style="font-size:20px; margin-top: 5%;">Fantastic Beast:  The Secrets of Dumbledore</p>
-                        <button id="fantasticBeast"  class="btn btn-primary">Buy Now</button>
-                    </td>
-                    <td>
-                        <img style="box-shadow: 5px 10px 8px #888888;" width="300px" height="400px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCAT4deET55wX0MzpBp45_7201ZndSAI8m2W52rNVeVmEbEgEW">
-                        <p style="font-size:20px; margin-top: 5%;">Uncharted</p>
-                        <button id="uncharted" class="btn btn-primary">Buy Now</button>
-                    </td>
-                    <td>
-                        <img style="box-shadow: 5px 10px 8px #888888;" width="300px" height="400px" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSEvgeLxhr88FkwBaC_4Soj_BIqIhLHH8D9PEe6UYJg4zfe3J9I">
-                        <p style="font-size:20px; margin-top: 5%;">Avatar: The Last Airbender</p>
-                        <button id="avatar"  class="btn btn-primary">Buy Now</button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-      
+        <div id="cards" class="cards">
+            
+        </div>    
+        
+        <script src="../FrontEnd/script.js"></script>
+       
         <footer style="margin-top: 5%;">
             <p style="text-align:center; font-size: 12px">   
                 Proudly created by NG E SOON | 
                 <a href="mailto:p20012522@student.newinti.edu.my">p20012522@student.newinti.edu.my</a>
             </p>
         </footer>
-        
     </body>
 </html>
