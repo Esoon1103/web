@@ -1,16 +1,18 @@
-<!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edit this template
--->
+<?php
+session_start();
+?>
+
 <html>
     <!-- Favicon Icon -->
-    <link rel="icon" href="image/movielogo32.ico">
+    <link rel="icon" href="../image/movielogo32.ico">
     
     <head>   
         <meta charset="UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+        
         <style>
             /* width */
             ::-webkit-scrollbar {
@@ -58,7 +60,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
               font-size: 18px;
               transition: 0.6s ease;
               border-radius: 0 3px 3px 0;
-              user-select: none;
             }
 
             /* Position the "next button" to the right */
@@ -89,21 +90,34 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
         
         <!--Navigation Bar-->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            <img src="../image/movielogo.png" width="40" height="40"/>
+            <a class="navbar-brand" href="../FrontEnd/HomePage.php">N.E.S Cinema</a>
             <div class="container-fluid">
-                <img src="image/movielogo.png" width="40" height="40";>
-                <a class="navbar-brand" href="HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
+                <p> </p>
                 <ul class="navbar-nav">
+                    
                     <li class="nav-item">
-                      <a class="nav-link" href="MoviesPage.php">Movies</a>
+                      <a class="nav-link" href="../FrontEnd/MoviesPage.php">Movies</a>
                     </li>
+                    
                     <li class="nav-item">
-                      <a class="nav-link" href="TicketsOverviewPage.php">Tickets Overview</a>
+                      <?php
+                        if(isset($_SESSION['userLogged'])){
+                            echo '<a class="nav-link" href="../FrontEnd/TicketsOverviewPage.php">Tickets Overview</a>';
+                        }
+                        ?>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Account</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="AccountPage.php">Settings</a></li>
-                            <li><a class="dropdown-item" href="LoginPage.php">Log In</a></li>
+                           <?php
+                            if(isset($_SESSION['userLogged'])){
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/AccountPage.php">Settings</a></li>';
+                                echo '<li><a class="dropdown-item" href="../BackEnd/logout.php">Log Out</a></li>';
+                            }else{
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/LoginPage.php">Log In</a></li>';
+                            }
+                            ?>
                         </ul>
                     </li>
                 </ul>
@@ -114,9 +128,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
         
     
     </head>
-    <body style="background-color:whitesmoke;">
-        
+        <body style="background-color:whitesmoke;">
         <div style="height:50px"></div>
+        
+        <?php
+        if(isset($_SESSION['successLog'])){
+            ?>
+            <script>
+            Swal.fire({
+            icon: 'success',
+            title: 'Welcome Back',
+            text: 'Hello <?php echo $_SESSION['user'];?> '
+            });
+            </script>
+        <?php
+            unset($_SESSION['successLog']);
+        }
+        ?>
+        
         
         
         <!--Announcements-->
@@ -158,33 +187,64 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
 
             <div style="width:100%; height:400px; margin-top:5%;">
                 <table style="width:100%; height:100px;" >
-                    <tr align="center" style="padding:5px;" >
-                        <td>
-                            <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="https://upload.wikimedia.org/wikipedia/en/8/88/Thor_Love_and_Thunder_poster.jpeg" >
-                        </td>
-                        <td>
-                            <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="https://terrigen-cdn-dev.marvel.com/content/prod/1x/doctorstrangeinthemultiverseofmadness_lob_crd_02_3.jpg">
-                        </td>
-                        <td>
-                            <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="https://upload.wikimedia.org/wikipedia/en/2/21/Pirates_of_the_Caribbean%2C_Dead_Men_Tell_No_Tales.jpg">
-                        </td>
-                        <td>
-                            <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="https://upload.wikimedia.org/wikipedia/en/3/34/Fantastic_Beasts-_The_Secrets_of_Dumbledore.png">
-                        </td>
-                        <td>
-                            <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCAT4deET55wX0MzpBp45_7201ZndSAI8m2W52rNVeVmEbEgEW">
-                        </td>
-                        <td>
-                            <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSEvgeLxhr88FkwBaC_4Soj_BIqIhLHH8D9PEe6UYJg4zfe3J9I">
-                        </td>
-                    </tr>
+                    <?php
+                    include "../BackEnd/db.php";
+                    $sql = "SELECT image FROM movies";
+                    $result = $conn->query($sql);
+                    $count = 0;
+                    $max = false;
+
+                    if ($result->num_rows > 0) {
+                      // output data of each row
+                      while($row = $result->fetch_assoc()) {
+                         
+                          if($count == 0){
+                                echo '<tr align="center" style="padding:5px;">
+                                        <td>
+                                            <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="../image/'.$row['image'].'" >
+                                        </td>';
+                             
+                              
+                              $count = $count + 1;
+                              
+                          }else if($count % 6 == 0){
+                              echo '</tr><tr align="center" style="padding:5px;">';
+                              $count = 0;
+                              $count = $count + 1;
+                              $max = true;
+                              break;
+                          }else{
+                                  echo '<td>
+                                        <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="../image/'.$row['image'].'" >
+                                    </td>';
+                              
+                             
+                              $count = $count + 1;
+                          }
+                          if($max == true){
+                              break;
+                          }
+                          
+                      }
+                    }
+                   ?> 
+                    
                 </table>
             </div>
         </div>
             
             
-     
+     <?php if(isset($_SESSION["userLogged"])){
+         ?>
         <a style="margin-left: 46%; padding:10px" href="MoviesPage.php"><button class="btn btn-outline-primary">More Details</button></a>
+        <?php
+     }else{?>
+        
+         <a style="margin-left: 46%; padding:10px" href="LoginPage.php"><button class="btn btn-outline-primary">More Details</button></a>
+         <?php
+     }
+     ?>
+        
             
        
         <footer style="margin-top: 5%;">
@@ -194,7 +254,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
             </p>
             
         </footer> 
-        
         
     </body>
 </html>

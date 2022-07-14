@@ -1,6 +1,9 @@
+<?php
+session_start();
+?>
 <html>
     <!-- Favicon Icon -->
-    <link rel="icon" href="image/movielogo32.ico">
+    <link rel="icon" href="../image/movielogo32.ico">
     
     <head>   
         <meta charset="UTF-8">
@@ -153,21 +156,33 @@
         
         <!--Navigation Bar-->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            <img src="../image/movielogo.png" width="40" height="40";/>
+            <a class="navbar-brand" href="../FrontEnd/HomePage.php">N.E.S Cinema</a>
+            
             <div class="container-fluid">
-                <img src="image/movielogo.png" width="40" height="40";>
-                <a class="navbar-brand" href="HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
+                <p> </p>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                      <a class="nav-link" href="MoviesPage.php">Movies</a>
+                      <a class="nav-link" href="../FrontEnd/MoviesPage.php">Movies</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="TicketsOverviewPage.php">Tickets Overview</a>
+                      <?php
+                        if(isset($_SESSION['userLogged'])){
+                            echo '<a class="nav-link" href="../FrontEnd/TicketsOverviewPage.php">Tickets Overview</a>';
+                        }
+                        ?>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Account</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="AccountPage.php">Settings</a></li>
-                            <li><a class="dropdown-item" href="LoginPage.php">Log In</a></li>
+                            <?php
+                            if(isset($_SESSION['userLogged'])){
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/AccountPage.php">Settings</a></li>';
+                                echo '<li><a class="dropdown-item" href="../BackEnd/logout.php">Log Out</a></li>';
+                            }else{
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/LoginPage.php">Log In</a></li>';
+                            }
+                            ?>
                         </ul>
                     </li>
                 </ul>
@@ -180,31 +195,61 @@
     </head>
     <body style="background:whitesmoke;">
        
-            
+        <?php
+        include "../BackEnd/db.php";
         
+        $id = "";
+        if(isset($_GET["id"])){
+            $id = $_GET["id"];
+        }
         
-        <div style="width:100%; height:570px; margin-top:5%;" align="center" >
-            <div style="width:30%; height:100%; float:left;">
-                <img style="width: auto; box-shadow: 5px 10px 8px #888888; object-fit:cover;" src="https://terrigen-cdn-dev.marvel.com/content/prod/1x/doctorstrangeinthemultiverseofmadness_lob_crd_02_3.jpg">
-            </div>
-        
-            
-            <div style="background:whitesmoke; opacity: 0.5; padding:50px; box-shadow: 5px 20px 45px #888888; border-radius: 2%; height:100%; width:65%; float:left;">
-                <h2>Doctor Strange: Multiverse of Madness</h2>
-                <p style="margin-top:5%;">
-                    Doctor Strange teams up with a mysterious teenage girl from his dreams who can travel across multiverses, 
-                    to battle multiple threats, including other-universe versions of himself, which threaten to wipe out millions across 
-                    the multiverse. They seek help from Wanda the Scarlet Witch, Wong and others.
-                </p>
-                <label style="margin-top:1%; ">Time Length: <b>2 Hours 15 Minutes</b></label>
-            </div>
-        </div>
+        $sql = "SELECT id, name, image, description, length FROM movies WHERE id = $id";
+        $result = $conn->query($sql);
 
-        <h2 align="center" style=" margin-top:10%;">Tickets Showtime</h2>
+        if ($result->num_rows > 0) {
+          // output data of each row
+          while($row = $result->fetch_assoc()) {
+              
+              echo '<div style="width:100%; height:600px; margin-top:5%;" align="center";>
+                        <div style="width:30%; height:100%; margin:0 auto;">
+                            <img style="width: 70%;  height: 90%; box-shadow: 5px 10px 8px #888888; object-fit:cover;" src="../image/'.$row["image"].'">
+                        </div>
+                        
+                        <div style="margin-top:2%;">
+                        </div>
+                        
+                        <div style="background:whitesmoke; opacity: 0.5; padding:50px; box-shadow: 5px 20px 45px #888888; border-radius: 2%; height:55%;width:65%; margin:0 auto;">
+                            <h2>'.$row["name"].'</h2>
+                            <p style="margin-top:5%;">
+                                '.$row["description"].'
+                            </p>
+                            <label style="margin-top:1%; ">Time Length: <b>'.$row["length"].'</b></label>
+                        </div>
+                    </div>';
+          }
+        }
+        ?>
+        
+        <h2 align="center" style=" margin-top:30%;">Tickets Showtime</h2>
         
         <div style="background:#FF3232; padding:100px; margin-top:5%; width:100%; height:auto; box-shadow: 5px 10px 8px #888888; ">
             <table id="customers" align="center" style="width:50%; border:solid;" required>
-                <form action="PaymentPage.php">
+                <?php
+                include "../BackEnd/db.php";
+
+                $id = "";
+                if(isset($_GET["id"])){
+                    $id = $_GET["id"];
+                    $_SESSION['movieID'] = $id;
+                }
+
+                $sql = "SELECT time, date FROM movies WHERE id = $id";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                  // output data of each row
+                  while($row = $result->fetch_assoc()) {
+                      echo '<form action="../BackEnd/handle_purchase.php?id='.$id.'" method="post">
                     <tr>
                         <td>
                             Date
@@ -212,21 +257,11 @@
                         <td>
                             <select id="date" type="date" required>
                                 <option value="">None</option>
-                                <option value="24 April 2022">24 April 2022</option>
-                                <option value="25 April 2022">25 April 2022</option>
-                                <option value="26 April 2022">26 April 2022</option>
-                                <option value="27 April 2022">27 April 2022</option>
+                                <option value="'.$row["date"].'">'.$row["date"].'</option>
                             </select>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            Location
-                        </td>
-                        <td>
-                            <b><i>Hall 1</i></b>
-                        </td>
-                    </tr>
+                   
                         <tr>
                         <td>
                             Time
@@ -234,10 +269,7 @@
                         <td>
                             <select id="time" required>
                                 <option value="">None</option>
-                                <option value="130">1:30pm</option>
-                                <option value="530">5:30pm</option>
-                                <option value="730">7:30pm</option>
-                                <option value="1030">10:30pm</option>
+                                <option value="'.$row["time"].'">'.$row["time"].'</option>
                               </select>
                         </td>
                         </tr>
@@ -246,18 +278,7 @@
                                 Adults
                             </td>
                             <td>
-                                <select id="adultTicket" required>
-                                <option value="">None</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                              </select>
+                                <input type="number" min="0" value="" name=ticketAdult required>
                             </td>
                         </tr>
                         <tr>
@@ -265,38 +286,24 @@
                                 Kids
                             </td>
                             <td>
-                                <select id="kidTicket" required>
-                                    <option value="">None</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                </select>
+                                <input type="number" min="0" value="" name=ticketKid required>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                Total Price
-                            </td>
-                            <td>
-                                RM
-                            </td>
-                        </tr>
+                        
                         <tr align="center">
                             <td colspan="2">
-                                <button id="btnContinue" class="btn btn-primary btn-lg" type="submit" href="PaymentPage.php">Continue</button>
+                                <button id="btnContinue" class="btn btn-primary btn-lg" type="submit">Continue</button>
                             </td>
                         </tr>
-                    </form>
+                    </form>';
+                    }
+                        
+                }
+                ?>
+                     
             </table>
         </div>
         
         <div style="margin-bottom:5%"></div>
-       
     </body>
 </html>

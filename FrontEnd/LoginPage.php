@@ -1,12 +1,16 @@
-
+<?php
+session_start();
+?>
 <html>
     <!-- Favicon Icon -->
-    <link rel="icon" href="image/movielogo32.ico">
-    
-    <head>   
+    <link rel="icon" href="../image/movielogo32.ico">
+
+    <head>
         <meta charset="UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
         <style>
             /* width */
             ::-webkit-scrollbar {
@@ -54,7 +58,6 @@
               font-size: 18px;
               transition: 0.6s ease;
               border-radius: 0 3px 3px 0;
-              user-select: none;
             }
 
             /* Position the "next button" to the right */
@@ -129,21 +132,33 @@
         
         <!--Navigation Bar-->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            <img src="../image/movielogo.png" width="40" height="40">
+            <a class="navbar-brand" href="../FrontEnd/HomePage.php" style="float:left;">N.E.S Cinema</a>
+            
             <div class="container-fluid">
-                <img src="image/movielogo.png" width="40" height="40";>
-                <a class="navbar-brand" href="HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
+                <p> </p>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                      <a class="nav-link" href="MoviesPage.php">Movies</a>
+                      <a class="nav-link" href="../FrontEnd/MoviesPage.php">Movies</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="TicketsOverviewPage.php">Tickets Overview</a>
+                      <?php
+                        if(isset($_SESSION['userLogged'])){
+                            echo '<a class="nav-link" href="../FrontEnd/TicketsOverviewPage.php">Tickets Overview</a>';
+                        }
+                        ?>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Account</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="AccountPage.php">Settings</a></li>
-                            <li><a class="dropdown-item" href="LoginPage.php">Log In</a></li>
+                            <?php
+                            if(isset($_SESSION['userLogged'])){
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/AccountPage.php">Settings</a></li>';
+                                echo '<li><a class="dropdown-item" href="../BackEnd/logout.php">Log Out</a></li>';
+                            }else{
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/LoginPage.php">Log In</a></li>';
+                            }
+                            ?>
                         </ul>
                     </li>
                 </ul>
@@ -156,53 +171,126 @@
         <body style="background-color:whitesmoke;">
             
             <?php
-            $servername  = "localhost";
-            $username = "root";
-            $password = "";
+                if(isset($_GET['a']) /*you can validate the link here*/){
+                    $_SESSION['noUser']=$_GET['a'];
+                 }
+                ?>
             
-            $conn = new mysqli($servername, $username, $password);
+            <?php
             
-            if($conn->connect_error){
-                die("Connection Failed: ". $conn->connect_error);
+            if(isset($_SESSION['noUsertoViewTicket'])){
+
+                ?>
+                <script>
+                Swal.fire({
+                icon: 'warning',
+                title: 'Notice',
+                text: 'Login to view your tickets summary'
+                });
+                </script>
+            <?php
+                unset($_SESSION['noUsertoViewTicket']);
             }
-            echo 'Connected Successfully';
-            
-            $db = mysql_select_db("company", $connection);
+            ?>
             
             
+            <?php
             
+            if(isset($_SESSION['noUser'])){
+
+                ?>
+                <script>
+                Swal.fire({
+                icon: 'warning',
+                title: 'Notice',
+                text: 'Login before you Buy!'
+                });
+                </script>
+            <?php
+                unset($_SESSION['noUser']);
+            }
+            ?>
             
-            ?>a
+                
+            <?php
             
+            if(isset($_SESSION['successReg'])){
+
+                ?>
+                <script>
+                Swal.fire({
+                icon: 'success',
+                title: 'Thank You',
+                text: 'Account Registered!'
+                });
+                </script>
+            <?php
+                unset($_SESSION['successReg']);
+            }
+            ?>
+                
+            <?php
             
+            if(isset($_SESSION['fail'])){
+
+                ?>
+                <script>
+                Swal.fire({
+                icon: 'info',
+                title: 'Error',
+                text: 'Account is not Registered!',
+                footer: '<a href="../FrontEnd/RegisterPage.php">Register Now</a>'
+                });
+                </script>
+            <?php
+                unset($_SESSION['fail']);
+            }
+            ?>
+                
+            <?php
             
+            if(isset($_SESSION['wrongCredential'])){
+
+                ?>
+                <script>
+                Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'The email or password is incorrect!'
+                });
+                </script>
+            <?php
+                unset($_SESSION['wrongCredential']);
+            }
+            ?>
             
-            
-            
-            
-            
-            
-            
-            
-            <form action="/action_page.php">
+                
+                
+            <form action="../BackEnd/handle_log.php" method="POST">
+                
+                
                 <div class="container" style="margin-top:5%;">
                   <h1>Login</h1>
                   <p>Please fill in this form to use the features.</p>
                   <hr>
 
                   <label for="email"><b>Email</b></label>
-                  <input type="text" placeholder="Enter email address" name="email" id="email" required>
+                  <input type="text" placeholder="e.g. someone@example.com" name="email" id="email" pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" required>
 
                   <label for="psw"><b>Password</b></label>
-                  <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+                  <input type="password" placeholder="Enter Password" name="password" id="psw" required>
                   
                   <hr>
-                  <button type="submit" class="loginbtn">Login</button>
+                  <button type="submit" name="submit" class="loginbtn">Login</button>
                 </div>
                 </div>
 
                 <div class="container signin">
-                  <p>Does not have an account? <a href="RegisterPage.php">Register</a>.</p>
+                    <p>Does not have an account? <a href="RegisterPage.php">Register</a>.<br><br>
+                        or <br><br>
+                        Login as Admin <a href="../admin/login.php"><b>Admin</b></a>
+                  </p>
+                  
                 </div>
             </form>
             

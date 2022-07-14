@@ -2,13 +2,12 @@
 session_start();
 ?>
 <html>
-    <!-- Favicon Icon -->
-    <link rel="icon" href="../image/movielogo32.ico">
-    
-    <head>   
+    <head>
         <meta charset="UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
         <style>
             /* width */
             ::-webkit-scrollbar {
@@ -56,7 +55,6 @@ session_start();
               font-size: 18px;
               transition: 0.6s ease;
               border-radius: 0 3px 3px 0;
-              user-select: none;
             }
 
             /* Position the "next button" to the right */
@@ -102,7 +100,7 @@ session_start();
               }
 
               /* Set a style for the submit button */
-              .registerbtn {
+              .loginbtn {
                 background-color: #04AA6D;
                 color: white;
                 padding: 16px 20px;
@@ -113,7 +111,7 @@ session_start();
                 opacity: 0.9;
               }
 
-              .registerbtn:hover {
+              .loginbtn:hover {
                 opacity: 1;
               }
 
@@ -127,66 +125,45 @@ session_start();
                 background-color: #f1f1f1;
                 text-align: center;
               }
-            
         </style>
         
-        <!--Navigation Bar-->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-            <img src="../image/movielogo.png" width="40" height="40";>
-            <a class="navbar-brand" href="../FrontEnd/HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
-            <div class="container-fluid">
-                <p> </p>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                      <a class="nav-link" href="../FrontEnd/MoviesPage.php">Movies</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="../FrontEnd/TicketsOverviewPage.php">Tickets Overview</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Account</a>
-                        <ul class="dropdown-menu">
-                           <?php
-                            if(isset($_SESSION['userLogged'])){
-                                echo '<li><a class="dropdown-item" href="../FrontEnd/AccountPage.php">Settings</a></li>';
-                                echo '<li><a class="dropdown-item" href="../BackEnd/logout.php">Log Out</a></li>';
-                            }else{
-                                echo '<li><a class="dropdown-item" href="../FrontEnd/LoginPage.php">Log In</a></li>';
-                            }
-                            ?>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+            
         </nav>
-    
-      <title>NES Cinema</title>
-      
-    
     </head>
     <body>
+        <?php
+        if(isset($_SESSION['loginFailed'])){?>
+            <script>
+                alert("Invalid admin credentials");
+            </script>
+        <?php
+            unset($_SESSION['loginFailed']);
+        }
+        ?>
         
-        <div class="container" style="margin-top:5%;">
-            <h1>Account Details</h1>
-            <p>Welcome to be the member of NES Cinema</p>
-            <hr>
+        
+        <form action="admin_login.php" method="POST">
+                <div class="container" style="margin-top:5%;">
+                  <h1>Admin Login</h1>
+                  <hr>
 
-            
-            <?php
-            if(isset($_SESSION['userLogged'])){
-                echo '<label><b>Username</b></label>';
-                echo '<p> '.$_SESSION['user'].'</p>';
-                
-                echo '<label><b>Password</b></label>';
-                echo '<p> '.$_SESSION['userPsw'].'</p>';
-                
-                echo '<label><b>Email Address</b></label>';
-                echo '<p> '.$_SESSION['userEmail'].'</p>';
-            }
-            ?>
-            
-            <hr>
-        </div>
-       
+                  <label for="Name"><b>Name</b></label>
+                  <input type="text" placeholder="Enter Name"name="name" id="name" required>
+
+                  <label for="psw"><b>Password</b></label>
+                  <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+                  
+                  <hr>
+                  <button type="submit" name="submit" class="loginbtn">Login</button>
+                </div>
+                </div>
+
+                <div class="container signin">
+                    <p>
+                        Not Admin? <a href="../FrontEnd/LoginPage.php"><b>Go to User</b></a>
+                    </p>
+                </div>
+        </form> 
     </body>
 </html>

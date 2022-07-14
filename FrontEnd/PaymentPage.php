@@ -1,6 +1,9 @@
+<?php
+session_start();
+?>
 <html>
     <!-- Favicon Icon -->
-    <link rel="icon" href="image/movielogo32.ico">
+    <link rel="icon" href="../image/movielogo32.ico">
     
     <head>   
         <meta charset="UTF-8">
@@ -247,21 +250,33 @@ input::-webkit-inner-spin-button {
         
         <!--Navigation Bar-->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            <img src="../image/movielogo.png" width="40" height="40";/>
+            <a class="navbar-brand" href="HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
+            
             <div class="container-fluid">
-                <img src="image/movielogo.png" width="40" height="40";>
-                <a class="navbar-brand" href="HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
+                <p> </p>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                       <a class="nav-link" href="MoviesPage.php">Movies</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="TicketsOverviewPage.php">Tickets Overview</a>
+                      <?php
+                        if(isset($_SESSION['userLogged'])){
+                            echo '<a class="nav-link" href="../FrontEnd/TicketsOverviewPage.php">Tickets Overview</a>';
+                        }
+                        ?>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Account</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="AccountPage.php">Settings</a></li>
-                            <li><a class="dropdown-item" href="LoginPage.php">Log In</a></li>
+                            <?php
+                            if(isset($_SESSION['userLogged'])){
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/AccountPage.php">Settings</a></li>';
+                                echo '<li><a class="dropdown-item" href="../BackEnd/logout.php">Log Out</a></li>';
+                            }else{
+                                echo '<li><a class="dropdown-item" href="../FrontEnd/LoginPage.php">Log In</a></li>';
+                            }
+                            ?>
                         </ul>
                     </li>
                 </ul>
@@ -279,70 +294,84 @@ input::-webkit-inner-spin-button {
                     <h2>Confirm order and pay</h2>
                     <span>please make the payment, after that you can enjoy the movie.</span>
                 </div>
+                <?php
                 
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="card p-3">
-                            <h6 class="text-uppercase">Payment details</h6>
-                            <div class="inputbox mt-3"> <input type="text" name="name" class="form-control" required="required"> <span>Name on card</span> </div>
-
+                echo '<form action="../BackEnd/handle_payment.php" method="post">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <i class="fa fa-credit-card"></i> <span>Card Number</span> 
+                        <div class="col-md-8">
+                            <div class="card p-3">
+                                <h6 class="text-uppercase">Payment details</h6>
+                                <div class="inputbox mt-3"> <input type="text"  title="Numeric numbers are restricted. Please type in Alphabetical characters." name="name" pattern="[a-zA-Z][a-zA-Z\s]*" class="form-control" required="required"> <span>Name on card</span> </div>
 
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="inputbox mt-3 mr-2"> <input type="text" maxlength="16" title="This area is limited to 16 numeric numbers. For example, 1234567890123456" pattern="^\S{16}$" name="name" class="form-control" required="required"> <i class="fa fa-credit-card"></i> <span>Card Number</span> 
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                         <div class="d-flex flex-row">
+                                             <div class="inputbox mt-3 mr-2"> <input type="text" name="name" minlength="5" maxlength="5" class="form-control" required="required"> <span>Expiry</span> </div>
+                                          <div class="inputbox mt-3 mr-2"> <input type="text" name="name" minlength="3" maxlength="3" class="form-control" required="required"> <span>CVV</span> </div>
+
+                                         </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4 mb-4">
+                                    <h6 class="text-uppercase">Billing Address</h6>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <span>Street Address</span> </div>
+
+                                        </div>
+                                         <div class="col-md-6">
+                                            <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <span>City</span> </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-6">
+                                            <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <span>State/Province</span> </div>
+
+                                        </div>
+                                         <div class="col-md-6">
+                                             <div class="inputbox mt-3 mr-2"> <input type="text" minlength="5" maxlength="5" pattern="^\S{5}$" name="name" class="form-control" required="required"> <span>Zip code</span> </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 mb-4 d-flex justify-content-between">
+                                        <span>Previous step</span>
+                                        <button type="submit" class="btn btn-success px-3">
+                                            Pay RM
+                                            '.$_SESSION['totalPrice'].'
+
+                                        </button>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                             <div class="d-flex flex-row">
-                                 <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <span>Expiry</span> </div>
-                              <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <span>CVV</span> </div>
-                                 
-                             </div>
+
+                        <div class="col-md-4">
+
+                            <div class="card card-blue p-3 text-white mb-3">
+
+                               <span>You have to pay</span>
+                                <div class="d-flex flex-row align-items-end mb-3" class="highlight">
+                                    <h1 class="mb-0 yellow">
+                                        RM
+                                        
+                                        '.$_SESSION['totalPrice'].'
+
+                                        
+                                    </h1> <span></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="mt-4 mb-4">
-                        <h6 class="text-uppercase">Billing Address</h6>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <span>Street Address</span> </div>
-                                
-                            </div>
-                             <div class="col-md-6">
-                                <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <span>City</span> </div>
-                                
-                            </div>
-
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-md-6">
-                                <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <span>State/Province</span> </div>
-                                
-                            </div>
-                             <div class="col-md-6">
-                                <div class="inputbox mt-3 mr-2"> <input type="text" name="name" class="form-control" required="required"> <span>Zip code</span> </div>
-                               
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4 mb-4 d-flex justify-content-between">
-                            <span>Previous step</span>
-                            <button class="btn btn-success px-3">Pay RM</button>
-                        </div>
-            </div>
-
-            <div class="col-md-4">
-
-                <div class="card card-blue p-3 text-white mb-3">
-
-                   <span>You have to pay</span>
-                    <div class="d-flex flex-row align-items-end mb-3" class="highlight">
-                        <h1 class="mb-0 yellow">RM</h1> <span></span>
-                    </div>
-                </div>
-            </div>
+                </form>';
+                ?>
+                
         </div>
-      </div>
-        </body>
+    </body>
 </html>
-
