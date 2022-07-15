@@ -177,6 +177,18 @@ include "../BackEnd/db.php";
         ?>
             
             
+            
+            <?php
+        if(isset($_SESSION['duplicateMovie'])){?>
+            <script>
+                alert("Duplicate Movie Detected");
+            </script>
+        <?php
+            unset($_SESSION['duplicateMovie']);
+        }
+        ?>
+            
+            
         <div class="card-body" style="width:100%; margin-top: 5%;">
             <div class="row">
                 <div class="col-md-12">

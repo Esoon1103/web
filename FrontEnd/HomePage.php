@@ -233,19 +233,8 @@ session_start();
             </div>
         </div>
             
-            
-     <?php if(isset($_SESSION["userLogged"])){
-         ?>
+  
         <a style="margin-left: 46%; padding:10px" href="MoviesPage.php"><button class="btn btn-outline-primary">More Details</button></a>
-        <?php
-     }else{?>
-        
-         <a style="margin-left: 46%; padding:10px" href="LoginPage.php"><button class="btn btn-outline-primary">More Details</button></a>
-         <?php
-     }
-     ?>
-        
-            
        
         <footer style="margin-top: 5%;">
             <p style="text-align:center; font-size: 12px">   

@@ -170,10 +170,25 @@ session_start();
             <img style="width:100%; height:400px;" src="https://www.doditsolutions.com/wp-content/uploads/movie-theater-revival-popcorn-1.jpg">
         </div>
         
-        <div id="cards" class="cards">
+        <?php
+        if(isset($_SESSION['userLogged'])){ ?>
+            <div id="cards" class="cards">
             
-        </div>    
+            </div>
+        <?php
+        }else{?>
+            <div id="cardsNoUser" class="cards">
+            
+            </div>
+        <?php
+        $_SESSION['noUser'] = true;
+        }
         
+        ?>
+        
+        
+         
+        <script src="../FrontEnd/scriptNoUser.js"></script>
         <script src="../FrontEnd/script.js"></script>
        
         <footer style="margin-top: 5%;">

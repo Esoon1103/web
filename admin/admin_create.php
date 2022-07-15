@@ -181,7 +181,7 @@ session_start();
                         </td>
                         <td>
                             <label>Movie Image</label>
-                            <input type="file" name="img">
+                            <input type="file" name="img" accept="image/*" required>
                         </td>
                         <td>
                             <label>Movie Description</label>
