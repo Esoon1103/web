@@ -148,22 +148,7 @@ session_start();
     
     </head>
     <body>
-        <?php
-            
-            if(isset($_SESSION['noTickets'])){
-
-                ?>
-                <script>
-                Swal.fire({
-                icon: 'info',
-                title: 'Empty',
-                text: 'You did not purchase any movies'
-                });
-                </script>
-            <?php
-                unset($_SESSION['noTickets']);
-            }
-            ?> 
+        
         
         <!--Greeting-->
         <div style="width:100%; height:400px; margin-top: 3%">

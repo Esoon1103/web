@@ -1,6 +1,22 @@
 <?php
+
 session_start();
 include "../BackEnd/db.php";
+
+
+if ($_SERVER['PHP_AUTH_USER'] != "admin" && $_SERVER['PHP_AUTH_PW'] != "Admin!23") {
+    header('WWW-Authenticate: Basic realm="My Realm"');
+    header('HTTP/1.0 401 Unauthorized');
+    echo 'Auth error';
+    exit;
+}else {
+    if(isset($_SERVER['PHP_AUTH_USER'])){
+         echo "<p>Hello {$_SERVER['PHP_AUTH_USER']}.</p>";
+        echo "<p>You entered {$_SERVER['PHP_AUTH_PW']} as your password.</p>";
+    }
+}
+
+
 ?>
 <html>
     <head>
@@ -156,6 +172,20 @@ include "../BackEnd/db.php";
         </nav>
     </head>
     <body>
+        
+        
+        <?php
+        if(isset($_SESSION['successhttp'])){?>
+            <script>
+                alert("Welcome to the Admin Panel");
+            </script>
+            
+        <?php
+        
+            unset($_SESSION['successhttp']);
+        }
+        ?>
+        
         <?php
         if(isset($_SESSION['loginSuccess'])){?>
             <script>

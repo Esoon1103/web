@@ -77,11 +77,11 @@ session_start();
         
         <!--Navigation Bar-->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-            <img src="../image/movielogo.png" width="40" height="40";/>
-            <a class="navbar-brand" href="../FrontEnd/HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
+            
             
             <div class="container-fluid">
-                <p> </p>
+                <img src="../image/movielogo.png" width="40" height="40";/>
+            <a class="navbar-brand" href="../FrontEnd/HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                       <a class="nav-link " href="../FrontEnd/MoviesPage.php">Movies</a>
@@ -157,8 +157,7 @@ session_start();
                                         }        
                                     }else if($result->num_rows == 0){
                                         $_SESSION['noTickets'] = "Yes";
-                                        header("location: ../FrontEnd/MoviesPage.php");
-                                        exit();
+                                        
                                     }
                                     else{
                                         $_SESSION['noUsertoViewTicket'] = "Yes";
@@ -173,6 +172,24 @@ session_start();
                   </div>
                 </div>
             </div>
+        <?php
+            
+            if(isset($_SESSION['noTickets'])){
+
+                ?>
+                <script>
+                Swal.fire({
+                icon: 'info',
+                title: 'Empty',
+                text: 'You did not purchase any movies'
+                });
+                </script>
+            <?php
+                unset($_SESSION['noTickets']);
+            }
+            ?> 
+        
+        
         <?php
         if(isset($_SESSION['movieBuy'])){
 

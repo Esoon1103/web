@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 ?>
 
 <html>
@@ -201,7 +202,7 @@ session_start();
                           if($count == 0){
                                 echo '<tr align="center" style="padding:5px;">
                                         <td>
-                                            <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="../image/'.$row['image'].'" >
+                                            <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" height="300px" src="../image/'.$row['image'].'" >
                                         </td>';
                              
                               
@@ -215,7 +216,7 @@ session_start();
                               break;
                           }else{
                                   echo '<td>
-                                        <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;" width="200px" height="300px" src="../image/'.$row['image'].'" >
+                                        <img class="zoom" style="box-shadow: 5px 10px 8px #888888; border-radius: 2%;"  height="300px" src="../image/'.$row['image'].'" >
                                     </td>';
                               
                              
@@ -234,8 +235,10 @@ session_start();
         </div>
             
   
-        <a style="margin-left: 46%; padding:10px" href="MoviesPage.php"><button class="btn btn-outline-primary">More Details</button></a>
-       
+        <p align="center">
+            
+        <a style=" padding:10px" href="MoviesPage.php"><button class="btn btn-outline-primary">More Details</button></a>
+        </p>
         <footer style="margin-top: 5%;">
             <p style="text-align:center; font-size: 12px">   
                 Proudly created by NG E SOON | 

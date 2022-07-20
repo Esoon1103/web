@@ -132,10 +132,10 @@ session_start();
         
         <!--Navigation Bar-->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-            <img src="../image/movielogo.png" width="40" height="40";>
-            <a class="navbar-brand" href="../FrontEnd/HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
+            
             <div class="container-fluid">
-                <p> </p>
+                <img src="../image/movielogo.png" width="40" height="40";>
+            <a class="navbar-brand" href="../FrontEnd/HomePage.php" style="margin-left:-69%">N.E.S Cinema</a>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                       <a class="nav-link" href="../FrontEnd/MoviesPage.php">Movies</a>
